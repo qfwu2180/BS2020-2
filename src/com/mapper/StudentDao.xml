@@ -1,0 +1,300 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.dao.StudentDao" >
+  <resultMap id="BaseResultMap" type="com.pojo.Student" >
+    <id column="stid" property="stid" jdbcType="INTEGER" />
+    <result column="xh" property="xh" jdbcType="VARCHAR" />
+    <result column="name" property="name" jdbcType="VARCHAR" />
+    <result column="sex" property="sex" jdbcType="VARCHAR" />
+    <result column="bh" property="bh" jdbcType="VARCHAR" />
+    <result column="xuenian" property="xuenian" jdbcType="VARCHAR" />
+    <result column="login" property="login" jdbcType="VARCHAR" />
+    <result column="pwd" property="pwd" jdbcType="VARCHAR" />
+    <result column="role" property="role" jdbcType="VARCHAR" />
+    <result column="mail" property="mail" jdbcType="VARCHAR" />
+    <association property="bj" column="bh" select="getbybh"></association>
+  </resultMap>
+  <select id="getbybh" resultType="com.pojo.Banji">
+  select * from banji where bid=#{bh}
+  </select>
+  <sql id="Example_Where_Clause" >
+    <where >
+      <foreach collection="oredCriteria" item="criteria" separator="or" >
+        <if test="criteria.valid" >
+          <trim prefix="(" suffix=")" prefixOverrides="and" >
+            <foreach collection="criteria.criteria" item="criterion" >
+              <choose >
+                <when test="criterion.noValue" >
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue" >
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue" >
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue" >
+                  and ${criterion.condition}
+                  <foreach collection="criterion.value" item="listItem" open="(" close=")" separator="," >
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Update_By_Example_Where_Clause" >
+    <where >
+      <foreach collection="example.oredCriteria" item="criteria" separator="or" >
+        <if test="criteria.valid" >
+          <trim prefix="(" suffix=")" prefixOverrides="and" >
+            <foreach collection="criteria.criteria" item="criterion" >
+              <choose >
+                <when test="criterion.noValue" >
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue" >
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue" >
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue" >
+                  and ${criterion.condition}
+                  <foreach collection="criterion.value" item="listItem" open="(" close=")" separator="," >
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Base_Column_List" >
+    <if test="fields == null" >
+      stid, xh, name, sex, bh, xuenian, login, pwd, role, mail
+    </if>
+    <if test="fields != null" >
+      ${fields}
+    </if>
+  </sql>
+  <select id="selectByExample" resultMap="BaseResultMap" parameterType="com.pojo.StudentQuery" >
+    select
+    <if test="distinct" >
+      distinct
+    </if>
+    <include refid="Base_Column_List" />
+    from student
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null" >
+      order by ${orderByClause}
+    </if>
+    <if test="startRow != null" >
+      limit #{startRow} , #{pageSize}
+    </if>
+  </select>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select 
+    stid,xh,name,sex,bh,xuenian,login,pwd,role,mail
+    from student
+    where stid = #{stid,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    delete from student
+    where stid = #{stid,jdbcType=INTEGER}
+  </delete>
+  <delete id="deleteByExample" parameterType="com.pojo.StudentQuery" >
+    delete from student
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+  </delete>
+  <insert id="insert" parameterType="com.pojo.Student" >
+    insert into student (stid, xh, name, 
+      sex, bh, xuenian, login, 
+      pwd, role, mail)
+    values (#{stid,jdbcType=INTEGER}, #{xh,jdbcType=VARCHAR}, #{name,jdbcType=VARCHAR}, 
+      #{sex,jdbcType=VARCHAR}, #{bh,jdbcType=VARCHAR}, #{xuenian,jdbcType=VARCHAR}, #{login,jdbcType=VARCHAR}, 
+      #{pwd,jdbcType=VARCHAR}, #{role,jdbcType=VARCHAR}, #{mail,jdbcType=VARCHAR})
+  </insert>
+  <insert id="insertSelective" parameterType="com.pojo.Student" >
+    insert into student
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="stid != null" >
+        stid,
+      </if>
+      <if test="xh != null" >
+        xh,
+      </if>
+      <if test="name != null" >
+        name,
+      </if>
+      <if test="sex != null" >
+        sex,
+      </if>
+      <if test="bh != null" >
+        bh,
+      </if>
+      <if test="xuenian != null" >
+        xuenian,
+      </if>
+      <if test="login != null" >
+        login,
+      </if>
+      <if test="pwd != null" >
+        pwd,
+      </if>
+      <if test="role != null" >
+        role,
+      </if>
+      <if test="mail != null" >
+        mail,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="stid != null" >
+        #{stid,jdbcType=INTEGER},
+      </if>
+      <if test="xh != null" >
+        #{xh,jdbcType=VARCHAR},
+      </if>
+      <if test="name != null" >
+        #{name,jdbcType=VARCHAR},
+      </if>
+      <if test="sex != null" >
+        #{sex,jdbcType=VARCHAR},
+      </if>
+      <if test="bh != null" >
+        #{bh,jdbcType=VARCHAR},
+      </if>
+      <if test="xuenian != null" >
+        #{xuenian,jdbcType=VARCHAR},
+      </if>
+      <if test="login != null" >
+        #{login,jdbcType=VARCHAR},
+      </if>
+      <if test="pwd != null" >
+        #{pwd,jdbcType=VARCHAR},
+      </if>
+      <if test="role != null" >
+        #{role,jdbcType=VARCHAR},
+      </if>
+      <if test="mail != null" >
+        #{mail,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <select id="countByExample" parameterType="com.pojo.StudentQuery" resultType="java.lang.Integer" >
+    select count(*) from student
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+  </select>
+  <update id="updateByExampleSelective" parameterType="map" >
+    update student
+    <set >
+      <if test="record.stid != null" >
+        stid = #{record.stid,jdbcType=INTEGER},
+      </if>
+      <if test="record.xh != null" >
+        xh = #{record.xh,jdbcType=VARCHAR},
+      </if>
+      <if test="record.name != null" >
+        name = #{record.name,jdbcType=VARCHAR},
+      </if>
+      <if test="record.sex != null" >
+        sex = #{record.sex,jdbcType=VARCHAR},
+      </if>
+      <if test="record.bh != null" >
+        bh = #{record.bh,jdbcType=VARCHAR},
+      </if>
+      <if test="record.xuenian != null" >
+        xuenian = #{record.xuenian,jdbcType=VARCHAR},
+      </if>
+      <if test="record.login != null" >
+        login = #{record.login,jdbcType=VARCHAR},
+      </if>
+      <if test="record.pwd != null" >
+        pwd = #{record.pwd,jdbcType=VARCHAR},
+      </if>
+      <if test="record.role != null" >
+        role = #{record.role,jdbcType=VARCHAR},
+      </if>
+      <if test="record.mail != null" >
+        mail = #{record.mail,jdbcType=VARCHAR},
+      </if>
+    </set>
+    <if test="_parameter != null" >
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByExample" parameterType="map" >
+    update student
+    set stid = #{record.stid,jdbcType=INTEGER},
+      xh = #{record.xh,jdbcType=VARCHAR},
+      name = #{record.name,jdbcType=VARCHAR},
+      sex = #{record.sex,jdbcType=VARCHAR},
+      bh = #{record.bh,jdbcType=VARCHAR},
+      xuenian = #{record.xuenian,jdbcType=VARCHAR},
+      login = #{record.login,jdbcType=VARCHAR},
+      pwd = #{record.pwd,jdbcType=VARCHAR},
+      role = #{record.role,jdbcType=VARCHAR},
+      mail = #{record.mail,jdbcType=VARCHAR}
+    <if test="_parameter != null" >
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByPrimaryKeySelective" parameterType="com.pojo.Student" >
+    update student
+    <set >
+      <if test="xh != null" >
+        xh = #{xh,jdbcType=VARCHAR},
+      </if>
+      <if test="name != null" >
+        name = #{name,jdbcType=VARCHAR},
+      </if>
+      <if test="sex != null" >
+        sex = #{sex,jdbcType=VARCHAR},
+      </if>
+      <if test="bh != null" >
+        bh = #{bh,jdbcType=VARCHAR},
+      </if>
+      <if test="xuenian != null" >
+        xuenian = #{xuenian,jdbcType=VARCHAR},
+      </if>
+      <if test="login != null" >
+        login = #{login,jdbcType=VARCHAR},
+      </if>
+      <if test="pwd != null" >
+        pwd = #{pwd,jdbcType=VARCHAR},
+      </if>
+      <if test="role != null" >
+        role = #{role,jdbcType=VARCHAR},
+      </if>
+      <if test="mail != null" >
+        mail = #{mail,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where stid = #{stid,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.pojo.Student" >
+    update student
+    set xh = #{xh,jdbcType=VARCHAR},
+      name = #{name,jdbcType=VARCHAR},
+      sex = #{sex,jdbcType=VARCHAR},
+      bh = #{bh,jdbcType=VARCHAR},
+      xuenian = #{xuenian,jdbcType=VARCHAR},
+      login = #{login,jdbcType=VARCHAR},
+      pwd = #{pwd,jdbcType=VARCHAR},
+      role = #{role,jdbcType=VARCHAR},
+      mail = #{mail,jdbcType=VARCHAR}
+    where stid = #{stid,jdbcType=INTEGER}
+  </update>
+</mapper>

@@ -1,0 +1,302 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.dao.StuzuoyeDao" >
+  <resultMap id="BaseResultMap" type="com.pojo.Stuzuoye" >
+    <id column="stuzyid" property="stuzyid" jdbcType="INTEGER" />
+    <result column="stid" property="stid" jdbcType="INTEGER" />
+    <result column="fujian" property="fujian" jdbcType="VARCHAR" />
+    <result column="socre" property="socre" jdbcType="VARCHAR" />
+    <result column="createtime" property="createtime" jdbcType="TIMESTAMP" />
+    <result column="banji" property="banji" jdbcType="VARCHAR" />
+    <result column="kemu" property="kemu" jdbcType="VARCHAR" />
+    <result column="zyid" property="zyid" jdbcType="INTEGER" />
+    <result column="pic" property="pic" jdbcType="VARCHAR" />
+    <association property="stu" column="stid" select="getbystid"></association>
+     <association property="bj" column="banji" select="getbybid"></association>
+    
+    <association property="zy" column="zyid" select="getbyzyid"></association>
+  </resultMap>
+   <select id="getbybid" resultType="com.pojo.Banji">
+  select * from banji where bid=#{banji}
+  </select>
+  <select id="getbystid" resultType="com.pojo.Student">
+  select * from student where stid=#{stid}
+  </select>
+  
+  <resultMap type="com.pojo.Zuoye" id="zymap">
+  <result column="tid" property="tid"/>
+  <association property="t" column="tid" select="getbytid"  ></association>
+  </resultMap>
+  <select id="getbytid" resultType="com.pojo.Myuser">
+  select * from Myuser where uid=#{tid}
+  </select>
+  <select id="getbyzyid" resultMap="zymap">
+  select * from zuoye where zyid=#{zyid}
+  </select>
+  <sql id="Example_Where_Clause" >
+    <where >
+      <foreach collection="oredCriteria" item="criteria" separator="or" >
+        <if test="criteria.valid" >
+          <trim prefix="(" suffix=")" prefixOverrides="and" >
+            <foreach collection="criteria.criteria" item="criterion" >
+              <choose >
+                <when test="criterion.noValue" >
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue" >
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue" >
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue" >
+                  and ${criterion.condition}
+                  <foreach collection="criterion.value" item="listItem" open="(" close=")" separator="," >
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Update_By_Example_Where_Clause" >
+    <where >
+      <foreach collection="example.oredCriteria" item="criteria" separator="or" >
+        <if test="criteria.valid" >
+          <trim prefix="(" suffix=")" prefixOverrides="and" >
+            <foreach collection="criteria.criteria" item="criterion" >
+              <choose >
+                <when test="criterion.noValue" >
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue" >
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue" >
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue" >
+                  and ${criterion.condition}
+                  <foreach collection="criterion.value" item="listItem" open="(" close=")" separator="," >
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Base_Column_List" >
+    <if test="fields == null" >
+      stuzyid, stid, fujian, socre, createtime, banji, kemu, zyid, pic
+    </if>
+    <if test="fields != null" >
+      ${fields}
+    </if>
+  </sql>
+  <select id="selectByExample" resultMap="BaseResultMap" parameterType="com.pojo.StuzuoyeQuery" >
+    select
+    <if test="distinct" >
+      distinct
+    </if>
+    <include refid="Base_Column_List" />
+    from stuzuoye
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null" >
+      order by ${orderByClause}
+    </if>
+    <if test="startRow != null" >
+      limit #{startRow} , #{pageSize}
+    </if>
+  </select>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select 
+    stuzyid,stid,fujian,socre,createtime,banji,kemu,zyid,pic
+    from stuzuoye
+    where stuzyid = #{stuzyid,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    delete from stuzuoye
+    where stuzyid = #{stuzyid,jdbcType=INTEGER}
+  </delete>
+  <delete id="deleteByExample" parameterType="com.pojo.StuzuoyeQuery" >
+    delete from stuzuoye
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+  </delete>
+  <insert id="insert" parameterType="com.pojo.Stuzuoye" >
+    insert into stuzuoye (stuzyid, stid, fujian, 
+      socre, createtime, banji, 
+      kemu, zyid, pic)
+    values (#{stuzyid,jdbcType=INTEGER}, #{stid,jdbcType=INTEGER}, #{fujian,jdbcType=VARCHAR}, 
+      #{socre,jdbcType=VARCHAR}, #{createtime,jdbcType=TIMESTAMP}, #{banji,jdbcType=VARCHAR}, 
+      #{kemu,jdbcType=VARCHAR}, #{zyid,jdbcType=INTEGER}, #{pic,jdbcType=VARCHAR})
+  </insert>
+  <insert id="insertSelective" parameterType="com.pojo.Stuzuoye" >
+    insert into stuzuoye
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="stuzyid != null" >
+        stuzyid,
+      </if>
+      <if test="stid != null" >
+        stid,
+      </if>
+      <if test="fujian != null" >
+        fujian,
+      </if>
+      <if test="socre != null" >
+        socre,
+      </if>
+      <if test="createtime != null" >
+        createtime,
+      </if>
+      <if test="banji != null" >
+        banji,
+      </if>
+      <if test="kemu != null" >
+        kemu,
+      </if>
+      <if test="zyid != null" >
+        zyid,
+      </if>
+      <if test="pic != null" >
+        pic,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="stuzyid != null" >
+        #{stuzyid,jdbcType=INTEGER},
+      </if>
+      <if test="stid != null" >
+        #{stid,jdbcType=INTEGER},
+      </if>
+      <if test="fujian != null" >
+        #{fujian,jdbcType=VARCHAR},
+      </if>
+      <if test="socre != null" >
+        #{socre,jdbcType=VARCHAR},
+      </if>
+      <if test="createtime != null" >
+        #{createtime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="banji != null" >
+        #{banji,jdbcType=VARCHAR},
+      </if>
+      <if test="kemu != null" >
+        #{kemu,jdbcType=VARCHAR},
+      </if>
+      <if test="zyid != null" >
+        #{zyid,jdbcType=INTEGER},
+      </if>
+      <if test="pic != null" >
+        #{pic,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <select id="countByExample" parameterType="com.pojo.StuzuoyeQuery" resultType="java.lang.Integer" >
+    select count(*) from stuzuoye
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+  </select>
+  <update id="updateByExampleSelective" parameterType="map" >
+    update stuzuoye
+    <set >
+      <if test="record.stuzyid != null" >
+        stuzyid = #{record.stuzyid,jdbcType=INTEGER},
+      </if>
+      <if test="record.stid != null" >
+        stid = #{record.stid,jdbcType=INTEGER},
+      </if>
+      <if test="record.fujian != null" >
+        fujian = #{record.fujian,jdbcType=VARCHAR},
+      </if>
+      <if test="record.socre != null" >
+        socre = #{record.socre,jdbcType=VARCHAR},
+      </if>
+      <if test="record.createtime != null" >
+        createtime = #{record.createtime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.banji != null" >
+        banji = #{record.banji,jdbcType=VARCHAR},
+      </if>
+      <if test="record.kemu != null" >
+        kemu = #{record.kemu,jdbcType=VARCHAR},
+      </if>
+      <if test="record.zyid != null" >
+        zyid = #{record.zyid,jdbcType=INTEGER},
+      </if>
+      <if test="record.pic != null" >
+        pic = #{record.pic,jdbcType=VARCHAR},
+      </if>
+    </set>
+    <if test="_parameter != null" >
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByExample" parameterType="map" >
+    update stuzuoye
+    set stuzyid = #{record.stuzyid,jdbcType=INTEGER},
+      stid = #{record.stid,jdbcType=INTEGER},
+      fujian = #{record.fujian,jdbcType=VARCHAR},
+      socre = #{record.socre,jdbcType=VARCHAR},
+      createtime = #{record.createtime,jdbcType=TIMESTAMP},
+      banji = #{record.banji,jdbcType=VARCHAR},
+      kemu = #{record.kemu,jdbcType=VARCHAR},
+      zyid = #{record.zyid,jdbcType=INTEGER},
+      pic = #{record.pic,jdbcType=VARCHAR}
+    <if test="_parameter != null" >
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByPrimaryKeySelective" parameterType="com.pojo.Stuzuoye" >
+    update stuzuoye
+    <set >
+      <if test="stid != null" >
+        stid = #{stid,jdbcType=INTEGER},
+      </if>
+      <if test="fujian != null" >
+        fujian = #{fujian,jdbcType=VARCHAR},
+      </if>
+      <if test="socre != null" >
+        socre = #{socre,jdbcType=VARCHAR},
+      </if>
+      <if test="createtime != null" >
+        createtime = #{createtime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="banji != null" >
+        banji = #{banji,jdbcType=VARCHAR},
+      </if>
+      <if test="kemu != null" >
+        kemu = #{kemu,jdbcType=VARCHAR},
+      </if>
+      <if test="zyid != null" >
+        zyid = #{zyid,jdbcType=INTEGER},
+      </if>
+      <if test="pic != null" >
+        pic = #{pic,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where stuzyid = #{stuzyid,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.pojo.Stuzuoye" >
+    update stuzuoye
+    set stid = #{stid,jdbcType=INTEGER},
+      fujian = #{fujian,jdbcType=VARCHAR},
+      socre = #{socre,jdbcType=VARCHAR},
+      createtime = #{createtime,jdbcType=TIMESTAMP},
+      banji = #{banji,jdbcType=VARCHAR},
+      kemu = #{kemu,jdbcType=VARCHAR},
+      zyid = #{zyid,jdbcType=INTEGER},
+      pic = #{pic,jdbcType=VARCHAR}
+    where stuzyid = #{stuzyid,jdbcType=INTEGER}
+  </update>
+</mapper>
